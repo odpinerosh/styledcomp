@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Components</title>
+</head>
+<body>
+    <div id="container"></div>
+
+    <script>
+        function buildComp(strings, ...dynaValues) {
+            return (props) => {
+                let newContent = strings.slice();
+                dynaValues.forEach((value, index) => {
+                    newContent[index] += props[value];
+                })
+                return newContent.join('');
+            }
+        }
+        
+        const props = {
+            msg: 'No te rindas',
+            sub: 'mi perritu...'
+        }
+
+        let Title = buildComp`<marquee>Daniel: ${'msg'}, ${'sub'}...</marquee>`(props);
+
+        function render(comp, contenedor) {
+            contenedor.innerHTML = comp;
+        }
+
+        const styled = (styles, ...args) => {
+            return `
+                <${args[1]} style = "${styles}">
+                    ${args[0]}
+                </${args[1]}>
+            `;
+        }
+        
+        /*
+            Cambié un poco la definición de esta función para que ahora reciba por parámetro
+            la etiqueta HTML. Luego la paso a la función styled como arreglo adicional.
+
+            Llamé 'marquee' al primer parámetro por facilidad de recordar,
+            solamente porque el componente se muestra dentro de una etiqueta marquee...  
+        */
+        const TitleStyled = (marquee, label) => { 
+            return styled`color: #0099ff; 
+                font-family: system-ui;
+                text-shadow: 2px 2px 0 black;${marquee}${label}
+            `;
+            }
+        ;
+
+        render(TitleStyled(Title, 'h2'), window.container);
+
+    </script>
+</body>
+</html>
